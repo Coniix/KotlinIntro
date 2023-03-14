@@ -1,51 +1,84 @@
-var width = 5
-var height = 5
-var currentPositionX: Int = width/2
-var currentPositionY: Int = height/2
-var arr = Array(width) { IntArray(height) }
+import mineSweeper.*
+import java.util.*
 
+var width: Int = 0
+var height = 0
+var mines = 0
+var map: MineSweeperMap? = null
+var playGame = true
 fun main() {
-    arr[currentPositionY][currentPositionX] = 1
-    renderMap(arr)
 
-    while(true){
-        print("Would you like to move Up,Down,Left,Right?: ")
-        var direction = parseDirection(readln())
-        if(direction != "invalid"){
-            updatePosition(direction)
-        } else {
-            println("Invalid direction please try again")
+    do {
+        print("\n\n\n\n\n\n\n\n\n\n\nHow wide would you like your board: ")
+        width = getInput()
+    }while(width<=1)
+
+    do {
+        println("\n\n\n\n\n\n\n\n\nBoard width: $width")
+        print("How tall would you like your board: ")
+        height = getInput()
+    }while(height<=1)
+
+    do {
+        println("\n\n\n\n\n\n\n\n\n\nBoard width: $width")
+        println("Board height: $height")
+        print("How many mines would you like: ")
+        mines = getInput()
+        if (mines >= (width*height)){
+            mines = (width*height) -1
         }
+    }while(mines<=1)
 
-        renderMap(arr)
+    map = MineSweeperMap(height, width, mines)
+
+    while(playGame){
+        print("Type to move - w(up) s(down) a(left) d(right) to move, e(open) to show square: ")
+        parseDirection(readln())
+
+        map!!.renderMap()
     }
 }
 
-fun updatePosition(direction: String) {
-    arr[currentPositionY][currentPositionX] = 0
-    when (direction) {
-        "up" -> if(currentPositionY-1 < 0){}else{currentPositionY--}
-        "down" -> if(currentPositionY+1 > height -1){}else{currentPositionY ++}
-        "left" -> if(currentPositionX-1 < 0){}else{currentPositionX--}
-        "right" -> if(currentPositionX+1 > width -1){}else{currentPositionX++}
-        else -> "invalid"
+fun getInput(): Int {
+    var userInput = 0
+
+    try {
+        val scanner = Scanner(System.`in`)
+        userInput = scanner.nextInt()
+        if (userInput <= 1){
+            println("\n\n\n\n\n\n\n\n\n\nPlease enter a positive whole number > 1")
+        }
+    }catch (e : InputMismatchException){
+        println("\n\n\n\n\n\n\n\n\n\nSorry that is an invalid entry")
     }
-    arr[currentPositionY][currentPositionX] = 1
+
+    return userInput
 }
 
-fun parseDirection(userInput: String): String {
+fun parseDirection(userInput: String) {
 
-    return when (userInput.lowercase()) {
-        "up", "u" -> "up"
-        "down", "d" -> "down"
-        "left", "l" -> "left"
-        "right", "r" -> "right"
-        else -> "invalid"
+    val input = userInput.lowercase()
+    val chars: CharArray = input.toCharArray()
+    val firstChar = chars.first()
+    var charCount = 0
+    for (c in chars) {
+        if (c != firstChar) {
+            charCount = -1
+            map?.setErrorMsg("Invalid direction please try again")
+        } else{
+            charCount++
+        }
     }
-}
 
-fun renderMap(arr: Array<IntArray>){
-    for (row in arr) {
-        println(row.contentToString())
+    if(charCount >= 0){
+        when (chars.first()) {
+            'w' -> map?.updatePlayerPos("up", charCount)
+            's' -> map?.updatePlayerPos("down", charCount)
+            'a' -> map?.updatePlayerPos("left", charCount)
+            'd' -> map?.updatePlayerPos("right", charCount)
+            ' ' -> map?.updatePlayerPos("open", charCount)
+            'p' -> playGame = false
+            else -> map?.setErrorMsg("Invalid direction please try again")
+        }
     }
 }
