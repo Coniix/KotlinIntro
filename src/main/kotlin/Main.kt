@@ -36,6 +36,13 @@ fun main() {
         parseDirection(readln())
 
         map!!.renderMap()
+        if(map!!.checkGameStatus() == "Game over - You lose"){
+            playGame = false
+            println("GAME OVER ------ You Lose")
+        } else if (map!!.checkGameStatus() == "Game over - You Won"){
+            playGame = false
+            println("GAME OVER ------ You Won!!!")
+        }
     }
 }
 

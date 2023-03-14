@@ -7,6 +7,8 @@ class MineSweeperMap(private var height: Int, private var width: Int, private va
     private var playerYPos: Int = 0
     private var playerXPos: Int = 0
     private var moveErrorMsg = ""
+    private var mineHit = false
+    private var cellsCleared = 0
 
     init {
         placeMines()
@@ -69,8 +71,11 @@ class MineSweeperMap(private var height: Int, private var width: Int, private va
 
     private fun openCell() {
         renderMap[playerYPos][playerXPos] = " ${map[playerYPos][playerXPos]} "
+        cellsCleared++
         if(map[playerYPos][playerXPos] == "■"){
             openBlankCells(playerYPos, playerXPos)
+        } else if (map[playerYPos][playerXPos] == "*"){
+            mineHit = true
         }
     }
 
@@ -81,6 +86,7 @@ class MineSweeperMap(private var height: Int, private var width: Int, private va
                     if (x in 0 until width){
                         if(this.map[y][x] != "*" && (this.renderMap[y][x] == " □ " || this.renderMap[y][x] == "≬□≬")){
                             renderMap[y][x] = " ${this.map[y][x]} "
+                            cellsCleared++
                             if(this.map[y][x] == "■"){
                                 openBlankCells(y, x)
                             }
@@ -106,5 +112,15 @@ class MineSweeperMap(private var height: Int, private var width: Int, private va
         }
         println(moveErrorMsg)
         moveErrorMsg = ""
+    }
+
+    fun checkGameStatus(): String{
+        if (mineHit){
+            return "Game over - You lose"
+        } else if (cellsCleared == (width *height) - mineCount){
+            return "Game over - You Won"
+        }
+
+        return "continue"
     }
 }
