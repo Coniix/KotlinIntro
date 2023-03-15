@@ -28,7 +28,7 @@ fun main() {
     do {
         println("\n\n\n\n\n\n\n\n\n\nBoard width: $width")
         println("Board height: $height")
-        print("How many mines would you like: ")
+        print("How many mines would you like (>=2): ")
         mines = getInput()
         if (mines >= (width*height)){
             mines = (width*height) -1
@@ -38,7 +38,7 @@ fun main() {
     map = MineSweeperMap(height, width, mines)
 
     while(playGame){
-        print("Type to move - w(up) s(down) a(left) d(right) to move, e(open) to show square: ")
+        print("Type to move - w(up) s(down) a(left) d(right) to move, space(open) to show square: ")
         parseDirection(readln())
 
         map!!.renderMap()
@@ -70,7 +70,11 @@ fun getInput(): Int {
 
 fun parseDirection(userInput: String) {
 
-    val input = userInput.lowercase()
+    var input = if(userInput.isNotEmpty()){
+        userInput.lowercase()
+    }else{
+        "uuuuu"
+    }
     val chars: CharArray = input.toCharArray()
     val firstChar = chars.first()
     var charCount = 0

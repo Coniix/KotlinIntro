@@ -70,8 +70,12 @@ class MineSweeperMap(private var height: Int, private var width: Int, private va
     }
 
     private fun openCell() {
-        renderMap[playerYPos][playerXPos] = " ${map[playerYPos][playerXPos]} "
-        cellsCleared++
+//        if(map[playerYPos][playerXPos] == "■" ){
+//            renderMap[playerYPos][playerXPos] = " ${map[playerYPos][playerXPos]} "
+//            cellsCleared++
+//        }
+
+
         if(map[playerYPos][playerXPos] == "■"){
             openBlankCells(playerYPos, playerXPos)
         } else if (map[playerYPos][playerXPos] == "*"){
@@ -107,6 +111,7 @@ class MineSweeperMap(private var height: Int, private var width: Int, private va
         for (y in 0 until this.renderMap.size){
             for(x in 0 until this.renderMap[y].size){
                 print(this.renderMap[y][x])
+//                print(this.map[y][x])
             }
             print("\n")
         }
