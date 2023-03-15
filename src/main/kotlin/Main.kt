@@ -9,14 +9,20 @@ var playGame = true
 fun main() {
 
     do {
-        print("\n\n\n\n\n\n\n\n\n\n\nHow wide would you like your board: ")
+        print("\n\n\n\n\n\n\n\n\n\n\nHow wide would you like your board (<=20): ")
         width = getInput()
+        if(width > 20){
+            width = 20
+        }
     }while(width<=1)
 
     do {
         println("\n\n\n\n\n\n\n\n\nBoard width: $width")
-        print("How tall would you like your board: ")
+        print("How tall would you like your board (<=20): ")
         height = getInput()
+        if(height > 20){
+            height = 20
+        }
     }while(height<=1)
 
     do {
